@@ -1,8 +1,10 @@
 # Music Visualiser Project
 
-Name:
+Name: Karl Negrillo
+Student Number: C22386123
 
-Student Number: 
+Name: Matiss Jurevics
+Student Number: C22501743
 
 ## Instructions
 - Fork this repository and use it a starter project for your assignment
