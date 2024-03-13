@@ -1,9 +1,9 @@
 # Music Visualiser Project
 
-Name: Karl Negrillo
+Name: Karl Negrillo  
 Student Number: C22386123
 
-Name: Matiss Jurevics
+Name: Matiss Jurevics  
 Student Number: C22501743
 
 ## Instructions
