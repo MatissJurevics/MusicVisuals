@@ -14,7 +14,7 @@ public class CubeVisual1 extends Visual
     {
         startMinim();
         //startListening();
-        loadAudio("Skrillex, Missy Elliott, & Mr. Oizo - RATATA [Official Visualizer].mp3");
+        loadAudio("heroplanet.mp3");
         colorMode(HSB);
     }
 
