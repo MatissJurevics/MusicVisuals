@@ -7,7 +7,11 @@ public class Camera {
     public double angle;
     public double speed;
     
-    Camera(double FOV) {
-        this.FOV = FOV;
+    Camera(double fov) {
+        FOV = fov;
+        x = 2;
+        y = 2;
+        angle = 1;
+
     }
 }

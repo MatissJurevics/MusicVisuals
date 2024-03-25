@@ -14,13 +14,24 @@ public class Raycaster {
     // A 2d array that represents the map that will be rendered
     // TODO: write a function that convers the n x n map into an n+2 x n+2 map with walls auto added instead of manually done here
     static int[][] map = {
-        {1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 1},
-        {1, 0, 0, 0, 1},
-        {1, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1}
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
-    Camera c = new Camera(FOV); // an o
+    public Camera c = new Camera(FOV); // an o
     HashMap<String,String> colors = new HashMap<String,String>();
 
     public Raycaster(ProjectVisual canvas) {
@@ -42,7 +53,7 @@ public class Raycaster {
     // colors.put("ceiling", "#44f");
 
     private boolean outOfBounds(int x, int y) {
-        return x < 0 || x > map[0].length || y < 0 || y > map.length;
+        return x < 0 || x > 15 || y < 0 || y > 15;
     }
 
     private static double toRadians(int degrees) {
@@ -159,7 +170,7 @@ public class Raycaster {
     private void renderWall(Ray ray, int i, double wallHeight) {
         double startY = (p.height / 2) - wallHeight / 2;
         if (ray.vertical) {
-            p.stroke(128);
+            p.stroke(128, 128, 128  );
         } else {
             p.stroke(156);
         }

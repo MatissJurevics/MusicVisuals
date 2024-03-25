@@ -1,15 +1,12 @@
 package ie.tudublin;
 
-import example.CubeVisual;
-import example.CubeVisual1;
-import example.MyVisual;
-import example.RotatingAudioBands;
+import ie.tudublin.ProjectVisual;
 
 public class Main {
 
     public void startUI() {
         String[] a = { "MAIN" };
-        processing.core.PApplet.runSketch(a, new CubeVisual1());
+        processing.core.PApplet.runSketch(a, new ProjectVisual());
     }
 
     public static void main(String[] args) {
