@@ -1,7 +1,7 @@
 package C22501743;
 import processing.core.PApplet;
 import C22501743.Camera;
-import java.util.HashMap;
+import java.util.*;
 
 public class Raycaster {
 
@@ -139,6 +139,25 @@ public class Raycaster {
         return returnVal;
     }
     
+    public Ray castRay(double angle) {
+        Ray vCol = getVCollision(angle);
+        Ray hCol = getHCollision(angle);
+
+        return (hCol.distance >= vCol.distance) ? vCol : hCol;
+    }
+
+    public List<Ray> getRays() {
+        double initialAngle = c.angle - c.FOV /2;
+        int numOfRays = p.width;                    // Number of rays is equal to the width of the window
+        double angleStep = FOV / numOfRays;         // Calculate the change in angle for each line drawn on the screen
+        List<Ray> returnVal = new ArrayList<Ray>(); // Initialise dynamic array
+        for (int i = 0; i < numOfRays; i++) {
+            double angle = initialAngle + (i * angleStep);
+            Ray ray = castRay(angle);
+            returnVal.add(ray);
+        }
+        return returnVal;
+    }
    
 
 
