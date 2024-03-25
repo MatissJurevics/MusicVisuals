@@ -99,7 +99,44 @@ public class Raycaster {
 
     public Ray getHCollision(double angle) {
         boolean up = Math.abs(Math.floor((angle / Math.PI) % 2)) != 0 ? true : false;
-        
+        double firstY = up 
+            ? Math.floor(c.y / CELL_SIZE) * CELL_SIZE 
+            : Math.floor(c.y / CELL_SIZE) * CELL_SIZE + CELL_SIZE ;
+        double firstX = c.x + (firstY - c.y) / Math.tan(angle);
+
+        int yA = up ? CELL_SIZE : -CELL_SIZE;
+        double xA = yA / Math.tan(angle);
+
+        boolean wall = false;
+        double nextX = firstX;
+        double nextY = firstY;
+        double cellX, cellY;
+
+        while (!wall) {
+            cellY = up 
+            ? Math.floor(nextY / CELL_SIZE) -1
+            : Math.floor(nextY / CELL_SIZE) ;
+
+            cellX =  Math.floor(nextX / CELL_SIZE);
+
+            if (outOfBounds((int) cellX,(int) cellY)) {
+                break;
+            }
+
+            wall = map[(int) cellY][(int) cellX] == 0 ? false : true;
+
+            if(!wall) {
+                nextX += xA;
+                nextY += yA;
+            }
+        }
+        // Creates a new ray to be returned
+        Ray returnVal;
+        returnVal.distance = distance(c.x, c.y, nextX, nextY);
+        returnVal.vertical = true;
+        returnVal.angle = angle;
+
+        return returnVal;
     }
     
    
