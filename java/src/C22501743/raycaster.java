@@ -1,11 +1,13 @@
 package C22501743;
 import processing.core.PApplet;
+import ie.tudublin.ProjectVisual;
 import C22501743.Camera;
+import C22501743.Ray;
 import java.util.*;
 
 public class Raycaster {
 
-    PApplet p;
+    ProjectVisual p;
     static int TICK = 45; // Duration of 1 frame in ms
     static double FOV = toRadians(80); // The cameras field of view in radians
     static int CELL_SIZE = 64; // The size of each cell in the 2d map
@@ -21,41 +23,37 @@ public class Raycaster {
     Camera c = new Camera(FOV); // an o
     HashMap<String,String> colors = new HashMap<String,String>();
 
-    Raycaster(PApplet canvas) {
-        this.p = canvas;
+    public Raycaster(ProjectVisual canvas) {
+        p = canvas;
     }
+
 
     // cam.x = 2;
     // cam.y = 2;
     // cam.angle = 0;
     // cam.speed = 0.1f;
     
-    colors.put("rays", "#dddd00");
-    colors.put("wallDark", "#666666");
-    colors.put("wallDarkSecondary", "#555555");
-    colors.put("wallLight", "#888888");
-    colors.put("wallLightSecondary", "#777777");
-    colors.put("floor", "#f4a460");
-    colors.put("ceiling", "#44f");
+    // colors.put("rays", "#dddd00");
+    // colors.put("wallDark", "#666666");
+    // colors.put("wallDarkSecondary", "#555555");
+    // colors.put("wallLight", "#888888");
+    // colors.put("wallLightSecondary", "#777777");
+    // colors.put("floor", "#f4a460");
+    // colors.put("ceiling", "#44f");
 
-    public boolean outOfBounds(int x, int y) {
+    private boolean outOfBounds(int x, int y) {
         return x < 0 || x > map[0].length || y < 0 || y > map.length;
     }
 
-    public static double toRadians(int degrees) {
+    private static double toRadians(int degrees) {
         return degrees * (180 / PApplet.PI);
     }
-    public static double distance(double x1,double y1,double x2,double y2) {
+    private static double distance(double x1,double y1,double x2,double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)); // Just uses pythogoras to get the distance between two points
     }
 
-    public class Ray {
-        double angle;
-        double distance;
-        boolean vertical;
-    }
 
-    public Ray getVCollision(double angle) {
+    private Ray getVCollision(double angle) {
         boolean right = Math.abs(Math.floor((angle - Math.PI / 2) / Math.PI) % 2) == 0 ? false : true; // Checks if the camera is facing the right
         double firstX, firstY;
 
@@ -89,15 +87,12 @@ public class Raycaster {
         }
         
         // Creates a new ray to be returned
-        Ray returnVal;
-        returnVal.distance = distance(c.x, c.y, nextX, nextY);
-        returnVal.vertical = true;
-        returnVal.angle = angle;
+        Ray returnVal = new Ray(angle, distance(c.x, c.y, nextX, nextY), true);
 
         return returnVal;
     }
 
-    public Ray getHCollision(double angle) {
+    private Ray getHCollision(double angle) {
         boolean up = Math.abs(Math.floor((angle / Math.PI) % 2)) != 0 ? true : false;
         double firstY = up 
             ? Math.floor(c.y / CELL_SIZE) * CELL_SIZE 
@@ -131,22 +126,18 @@ public class Raycaster {
             }
         }
         // Creates a new ray to be returned
-        Ray returnVal;
-        returnVal.distance = distance(c.x, c.y, nextX, nextY);
-        returnVal.vertical = true;
-        returnVal.angle = angle;
-
+        Ray returnVal = new Ray(angle, distance(c.x, c.y, nextX, nextY), false);
         return returnVal;
     }
     
-    public Ray castRay(double angle) {
+    private Ray castRay(double angle) {
         Ray vCol = getVCollision(angle);
         Ray hCol = getHCollision(angle);
 
         return (hCol.distance >= vCol.distance) ? vCol : hCol;
     }
 
-    public List<Ray> getRays() {
+    private List<Ray> getRays() {
         double initialAngle = c.angle - c.FOV /2;
         int numOfRays = p.width;                    // Number of rays is equal to the width of the window
         double angleStep = FOV / numOfRays;         // Calculate the change in angle for each line drawn on the screen
@@ -175,7 +166,7 @@ public class Raycaster {
         p.line((float) i,(float) startY,(float) i,(float) wallHeight);
     }
 
-    private void renderScene(List<Ray> rays) {
+    public void renderScene(List<Ray> rays) {
         int index = 0;
         for (Ray ray : rays) {
             double distance = fixFishEye(ray.distance, ray.angle, c.angle);
@@ -183,6 +174,11 @@ public class Raycaster {
             renderWall(ray, index, wallHeight);
             index++;
         }
+    }
+
+    public void run() {
+        List<Ray> rays = getRays();
+        renderScene(rays);
     }
 
    
