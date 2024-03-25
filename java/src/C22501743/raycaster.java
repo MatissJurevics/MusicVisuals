@@ -151,6 +151,7 @@ public class Raycaster {
         int numOfRays = p.width;                    // Number of rays is equal to the width of the window
         double angleStep = FOV / numOfRays;         // Calculate the change in angle for each line drawn on the screen
         List<Ray> returnVal = new ArrayList<Ray>(); // Initialise dynamic array
+
         for (int i = 0; i < numOfRays; i++) {
             double angle = initialAngle + (i * angleStep);
             Ray ray = castRay(angle);
@@ -158,6 +159,32 @@ public class Raycaster {
         }
         return returnVal;
     }
+
+    private double fixFishEye(double distance, double angle, double playerAngle) {
+        double dif = angle - playerAngle;
+        return distance * Math.cos(dif);
+    }
+    
+    private void renderWall(Ray ray, int i, double wallHeight) {
+        double startY = (p.height / 2) - wallHeight / 2;
+        if (ray.vertical) {
+            p.stroke(128);
+        } else {
+            p.stroke(156);
+        }
+        p.line((float) i,(float) startY,(float) i,(float) wallHeight);
+    }
+
+    private void renderScene(List<Ray> rays) {
+        int index = 0;
+        for (Ray ray : rays) {
+            double distance = fixFishEye(ray.distance, ray.angle, c.angle);
+            double wallHeight = ((CELL_SIZE * 5) / distance) * 277; // Arbitrary, can be adjusted
+            renderWall(ray, index, wallHeight);
+            index++;
+        }
+    }
+
    
 
 
