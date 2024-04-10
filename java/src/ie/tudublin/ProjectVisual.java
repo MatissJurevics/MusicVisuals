@@ -1,29 +1,35 @@
 package ie.tudublin;
 import ie.tudublin.Visual;
-import C22501743.Raycaster;
+import processing.opengl.PShader;
+import C22501743Refactor.Raycaster;
 
 public class ProjectVisual extends Visual 
 {
+    // PShader shader;
     private Raycaster raycaster = new Raycaster(this);
     public void settings() {
-        size(1080, 1920);
-    }
+        size(1200, 1200);
 
+    }
+    
     public void setup() {
+
         startMinim();
         loadAudio("heroplanet.mp3");
         colorMode(RGB);
     }
     public void keyPressed() {
         if (key == 'a') {
-            raycaster.c.angle += 0.3;
+            raycaster.c.turn(0.03f);
         } 
         if (key == 'd') {
-            raycaster.c.angle -= 0.3;
+            raycaster.c.turn(-0.03f);
         }
     }
 
     public void draw() {
+        
         raycaster.run();
+        raycaster.c.turn(0.03f);
     }
 }

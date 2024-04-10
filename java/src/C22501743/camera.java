@@ -1,17 +1,20 @@
 package C22501743;
 
 public class Camera {
-    public double FOV;
-    public double x;
-    public double y;
-    public double angle;
-    public double speed;
+    public float FOV;
+    public float x;
+    public float y;
+    public float angle;
+    public float speed;
     
-    Camera(double fov) {
+    Camera(float fov, int cellSize) {
         FOV = fov;
-        x = 2;
-        y = 2;
-        angle = 1;
+        x = 6 * cellSize;
+        y = 6 * cellSize;
+        angle = 1.8f;
+    }
 
+    public void turn(float ang) {
+        angle = (angle + ang % (2 * (float) Math.PI));
     }
 }
