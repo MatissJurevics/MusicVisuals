@@ -60,7 +60,7 @@ public class Raycaster {
      * A functions that clears the screen by printing a black rectangle over it
      */
     private void clearScene() {
-        p.fill(0);
+        p.fill(112,214,215);
         p.rect(0,0,p.width,p.height);
     }
 
@@ -137,7 +137,7 @@ public class Raycaster {
     private Ray castRay(float degAngle) {
         Ray vCol = getVerticalCollisions(degAngle);
         // Ray hCol = getHorizontalCollisions(degAngle);
-
+        System.out.println(vCol.distance);
         return vCol;
         // return (hCol.distance >= vCol.distance) ? vCol : hCol;
     }
@@ -185,7 +185,7 @@ public class Raycaster {
      * A function that renders the map onto the screen
      * @param scale a value that represents what scale you want the minimap to display at (1 = 64px)
      */
-    private void renderMinimap(float scale) {
+    private void renderMinimap(float scale, List<Ray> rays) {
         float cellSize = CELL_SIZE * scale;
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map.length; x++) {
@@ -199,20 +199,35 @@ public class Raycaster {
 
         p.fill(200, 128, 128);
         p.circle(cam.x * scale,cam.y * scale, 20);
+        float destx = cam.x + ((float) Math.cos(toRadians(cam.degAngle)) * 70) * scale;
+        float desty = cam.y + ((float) Math.sin(toRadians(cam.degAngle)) * 70) * scale;
+        p.fill(0,0,200);
+        p.stroke(0,0,200);
+        p.line(cam.x * scale, cam.y * scale, destx * scale, desty * scale);
+
+        for (Ray ray: rays) {
+
+            p.stroke(128);
+            // System.out.println(ray.distance);
+            float startX = cam.x * scale;
+            float startY = cam.y * scale;
+            // float endX = ((c.x + ((float) Math.cos(ray.angle)) * (float) ray.distance) * cellSize;
+            float endX = (startX + ((float) Math.cos(toRadians(ray.degAngle)) * ray.distance) * scale);
+            float endY = (startX + ((float) Math.sin(toRadians(ray.degAngle)) * ray.distance) * scale);
+            p.line(startX, startY, endX, endY);
+        }
         
     }
 
     boolean ran = false;
     public void run() {
-        if (!ran) {
+        
             clearScene();
             List<Ray> rays = getRays();
             renderScene(rays);
-            renderMinimap(0.5f);
+            renderMinimap(0.5f, rays);
             ran = true;
-            
-        } else {
-        } 
+        
     }
 
 }

@@ -10,8 +10,8 @@ public class Camera {
 
     public Camera(float degfov, int cellsize) {
         this.FOV = degfov;
-        this.x = cellsize;
-        this.y = cellsize;
+        this.x = cellsize * 5;
+        this.y = cellsize * 5;
         this.degAngle = 0;
     }
 

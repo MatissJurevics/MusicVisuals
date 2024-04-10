@@ -20,16 +20,17 @@ public class ProjectVisual extends Visual
     }
     public void keyPressed() {
         if (key == 'a') {
-            raycaster.c.turn(0.03f);
+            System.out.println("turning: " + raycaster.cam.degAngle);
+            raycaster.cam.turn(10f);
         } 
         if (key == 'd') {
-            raycaster.c.turn(-0.03f);
+            raycaster.cam.turn(-10f);
         }
     }
 
     public void draw() {
         
         raycaster.run();
-        raycaster.cam.turn(10);
+        
     }
 }
