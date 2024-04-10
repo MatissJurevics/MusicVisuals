@@ -1,10 +1,9 @@
 package C22501743Refactor;
 import processing.core.PApplet;
 import ie.tudublin.ProjectVisual;
-// Change name when changing folder name
-import C22501743Refactor.Ray;
-import C22501743Refactor.Camera;
 import java.util.*;
+// Change name when changing folder name
+import C22501743Refactor.*;
 /*
  * Changes made in refactor
  *  - changed from using radians by default to degrees
@@ -16,11 +15,11 @@ import java.util.*;
 
 public class Raycaster {
     ProjectVisual p;
-
+    
     static int TICK = 20;
     static float FOV = 90; // FOV in degrees
     static int CELL_SIZE = 64;
-
+    
     static int[][] map = {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -39,7 +38,7 @@ public class Raycaster {
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
-
+    
     public Camera cam = new Camera(FOV, CELL_SIZE);
 
     public Raycaster(ProjectVisual canvas) {
@@ -54,7 +53,7 @@ public class Raycaster {
          * @return True if the point is out of bounds and vice versa
     */
     private boolean checkOutOfBounds(int x, int y) {
-        
+        return x < 0 || x > map.length - 1 || y < 0 || y > map.length - 1;
     }
 
     /**
@@ -93,11 +92,93 @@ public class Raycaster {
 
     private Ray getVerticalCollisions(float degAngle) {
         float radAngle = toRadians(degAngle);
+        boolean right = Math.abs(Math.floor((radAngle - Math.PI / 2) / Math.PI) % 2) == 0 ? false : true;
+        
+        float firstX = right
+            ? (float) Math.floor(cam.x / CELL_SIZE) * CELL_SIZE + CELL_SIZE
+            : (float) Math.floor(cam.x / CELL_SIZE) * CELL_SIZE;
+        
+        // First possible point of failure (because I dont really get it)
+        float firstY = (cam.y + (firstX - cam.x)) * (float) Math.tan(toRadians(degAngle)); 
+
+        int xA = right ? CELL_SIZE : - CELL_SIZE;
+        float yA = xA * (float) Math.tan(toRadians(degAngle));
+
+        boolean wall = false;
+        float nextX = firstX;
+        float nextY = firstY;
+
+        while (!wall) {
+            int cellX = right 
+                ? (int) Math.floor(nextX / CELL_SIZE)
+                : (int) Math.floor(nextX / CELL_SIZE) - 1;
+            int cellY = (int) Math.floor(nextY / CELL_SIZE);
+
+            if (checkOutOfBounds(cellX, cellY)) {
+                break;
+            }
+            wall = map[cellX][cellY] != 0 ? true : false;
+
+            if (!wall) {
+                nextX += xA;
+                nextY += yA;
+            }
+        }
+
+        Ray returnVal = new Ray(degAngle, distance(cam.x, cam.y, nextX, nextY), true);
+        return returnVal;
 
     }
 
     private Ray getHorizontalCollisions(float degAngle) {
         float radAngle = toRadians(degAngle);
+    }
+
+    private Ray castRay(float degAngle) {
+        Ray vCol = getVerticalCollisions(degAngle);
+        // Ray hCol = getHorizontalCollisions(degAngle);
+
+        return vCol;
+        // return (hCol.distance >= vCol.distance) ? vCol : hCol;
+    }
+
+    private List<Ray> getRays() {
+        // might not be right because this is degrees rather than radians
+        float initialAngle = cam.degAngle - cam.FOV / 2;
+        int numOfRays = p.width;
+        float angleStep = cam.FOV / numOfRays;
+        List<Ray> returnVal = new ArrayList<Ray>();
+
+        for (int i = 0; i < numOfRays; i++) {
+            float angle = initialAngle + (i * angleStep);
+            Ray ray = castRay(angle);
+            returnVal.add(ray);
+        }
+
+        return returnVal;
+    }
+
+    private float fixFishEye(float distance, float angle, float playerAngle) {
+        float dif = angle - playerAngle;
+        // may not work because of radian conversion
+        return distance * (float) Math.cos(toRadians(dif));
+    }
+
+    private void renderWall(boolean vert, int i, float wallHeight) {
+        float startY = (p.height / 2) - wallHeight / 2;
+
+        p.fill(255);
+        p.rect((float) i,(float) startY,(float) 1,(float) wallHeight);
+    }
+
+    public void renderScene(List<Ray> rays) {
+        int index = 0;
+        for (Ray ray : rays) {
+            float distance = fixFishEye(ray.distance, ray.degAngle, cam.degAngle);
+            float wallHeight = ((CELL_SIZE * 5) / distance) * 277; // Arbitrary, can be adjusted
+            renderWall(ray.vertical, index, wallHeight);
+            index++;
+        }
     }
 
     /**
@@ -110,14 +191,28 @@ public class Raycaster {
             for (int x = 0; x < map.length; x++) {
                 if (map[y][x] != 0) {
                     p.fill(255);
+                    p.noStroke();
                     p.rect(x * cellSize, y * cellSize, cellSize, cellSize);
                 }
             }
         }
+
+        p.fill(200, 128, 128);
+        p.circle(cam.x * scale,cam.y * scale, 20);
+        
     }
 
+    boolean ran = false;
     public void run() {
-        renderMinimap(0.5f);
+        if (!ran) {
+            clearScene();
+            List<Ray> rays = getRays();
+            renderScene(rays);
+            renderMinimap(0.5f);
+            ran = true;
+            
+        } else {
+        } 
     }
 
 }

@@ -210,8 +210,6 @@ public class Raycaster {
             float wallHeight = ((CELL_SIZE * 5) / distance) * 277; // Arbitrary, can be adjusted
             renderWall(ray.vertical, index, wallHeight);
             index++;
-            
-
         }
     }
 
@@ -263,12 +261,6 @@ public class Raycaster {
             ran = true;
             
         } else {
-
-        }
-        
+        }   
     }
-
-   
-
-
 }

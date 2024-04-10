@@ -6,14 +6,16 @@ public class Camera {
     public float y;
     public float degAngle;
 
-    Camera(float degfov, int cellsize) {
-        FOV = degfov;
-        x = cellsize;
-        y = cellsize;
-        degAngle = 0;
+    
+
+    public Camera(float degfov, int cellsize) {
+        this.FOV = degfov;
+        this.x = cellsize;
+        this.y = cellsize;
+        this.degAngle = 0;
     }
 
-    public void turn(float newDegAngle) {
-       degAngle += newDegAngle;
+    public void turn(float turnDegAngle) {
+       degAngle += turnDegAngle;
     }
 }

@@ -30,6 +30,6 @@ public class ProjectVisual extends Visual
     public void draw() {
         
         raycaster.run();
-        raycaster.c.turn(0.03f);
+        raycaster.cam.turn(10);
     }
 }
