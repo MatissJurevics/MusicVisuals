@@ -10,7 +10,7 @@ import C22501743Refactor.*;
  *  - Cleaned up code and fixed bugs
  * 
  * Changes in place:
- * - I'm now using degrees until I absolutely cannot
+ * - I'm now using degrees until I absolutely cannot (nevermind its bad)
  */
 
 public class Raycaster {
@@ -132,6 +132,38 @@ public class Raycaster {
 
     private Ray getHorizontalCollisions(float degAngle) {
         float radAngle = toRadians(degAngle);
+
+        boolean up = Math.abs(Math.floor(radAngle / PApplet.PI) % 2) == 1 ? true : false;
+        float firstY = up
+            ? (float) Math.floor(cam.y / CELL_SIZE) * CELL_SIZE
+            : (float) Math.floor(cam.y / CELL_SIZE) * CELL_SIZE + CELL_SIZE;
+        float firstX = cam.x + (firstY - cam.y) / (float) Math.tan(radAngle);
+
+        float yA = up ? -CELL_SIZE : CELL_SIZE;
+        float xA = yA / (float) Math.tan(radAngle);
+
+        boolean wall = false;
+        float nextX = firstX;
+        float nextY = firstY;
+
+        while (!wall) {
+            int cellX = (int) Math.floor(nextX / CELL_SIZE);
+            int cellY = up 
+                ? (int) Math.floor(nextY / CELL_SIZE) - 1
+                : (int) Math.floor(nextY / CELL_SIZE);
+            
+            if (checkOutOfBounds(cellX, cellY)) {
+                wall = map[cellY][cellX] != 0 ? true : false;
+                if (!wall) {
+                    nextX += xA;
+                    nextY += yA;
+                }
+            }
+
+        }
+        
+        Ray returnVal = new Ray(degAngle, distance(cam.x, cam.y, nextX, nextY), false);
+        return returnVal;
     }
 
     private Ray castRay(float degAngle) {
