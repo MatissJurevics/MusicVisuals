@@ -161,17 +161,17 @@ public class Raycaster {
             }
 
         }
-        
+
         Ray returnVal = new Ray(degAngle, distance(cam.x, cam.y, nextX, nextY), false);
         return returnVal;
     }
 
     private Ray castRay(float degAngle) {
         Ray vCol = getVerticalCollisions(degAngle);
-        // Ray hCol = getHorizontalCollisions(degAngle);
-        System.out.println(vCol.distance);
-        return vCol;
-        // return (hCol.distance >= vCol.distance) ? vCol : hCol;
+        Ray hCol = getHorizontalCollisions(degAngle);
+        // System.out.println(vCol.distance);
+        // return vCol;
+        return (hCol.distance >= vCol.distance) ? vCol : hCol;
     }
 
     private List<Ray> getRays() {
@@ -256,7 +256,7 @@ public class Raycaster {
         
             clearScene();
             List<Ray> rays = getRays();
-            renderScene(rays);
+            // renderScene(rays);
             renderMinimap(0.5f, rays);
             ran = true;
         
