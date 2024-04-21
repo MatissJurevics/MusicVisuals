@@ -1,12 +1,14 @@
-package C22501743;
+package C22501743.oldCode;
 import processing.core.PApplet;
 // import processing.opengl.PShader;
 import ie.tudublin.ProjectVisual;
-import C22501743.Camera;
-import C22501743.Ray;
+
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import C22501743.oldCode.Camera;
+import C22501743.oldCode.Ray;
 
 public class Raycaster {
     boolean ran = false;

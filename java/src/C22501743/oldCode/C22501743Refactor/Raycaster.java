@@ -1,17 +1,9 @@
-package C22501743Refactor;
+package C22501743.oldCode.C22501743Refactor;
 import processing.core.PApplet;
 import ie.tudublin.ProjectVisual;
 import java.util.*;
-// Change name when changing folder name
-import C22501743Refactor.*;
-/*
- * Changes made in refactor
- *  - changed from using radians by default to degrees
- *  - Cleaned up code and fixed bugs
- * 
- * Changes in place:
- * - I'm now using degrees until I absolutely cannot (nevermind its bad)
- */
+
+import C22501743.oldCode.C22501743Refactor.*;
 
 public class Raycaster {
     ProjectVisual p;
@@ -92,24 +84,24 @@ public class Raycaster {
 
     private Ray getVerticalCollisions(float degAngle) {
         float radAngle = toRadians(degAngle);
-        boolean right = Math.abs(Math.floor((radAngle - Math.PI / 2) / Math.PI) % 2) == 0 ? false : true;
+        boolean right = Math.abs(Math.floor((radAngle - Math.PI / 2) / Math.PI) % 2) == 1 ? false : true;
         
         float firstX = right
             ? (float) Math.floor(cam.x / CELL_SIZE) * CELL_SIZE + CELL_SIZE
             : (float) Math.floor(cam.x / CELL_SIZE) * CELL_SIZE;
         
         // First possible point of failure (because I dont really get it)
-        float firstY = (cam.y + (firstX - cam.x)) * (float) Math.tan(toRadians(degAngle)); 
+        float firstY = cam.y + (firstX - cam.x) * (float) Math.tan(radAngle); 
 
         int xA = right ? CELL_SIZE : - CELL_SIZE;
-        float yA = xA * (float) Math.tan(toRadians(degAngle));
+        float yA = xA * (float) Math.tan(radAngle);
 
         boolean wall = false;
         float nextX = firstX;
         float nextY = firstY;
 
         while (!wall) {
-            int cellX = right 
+            int cellX = right
                 ? (int) Math.floor(nextX / CELL_SIZE)
                 : (int) Math.floor(nextX / CELL_SIZE) - 1;
             int cellY = (int) Math.floor(nextY / CELL_SIZE);
@@ -153,11 +145,12 @@ public class Raycaster {
                 : (int) Math.floor(nextY / CELL_SIZE);
             
             if (checkOutOfBounds(cellX, cellY)) {
-                wall = map[cellY][cellX] != 0 ? true : false;
-                if (!wall) {
-                    nextX += xA;
-                    nextY += yA;
-                }
+                break;
+            }
+            wall = map[cellY][cellX] != 0 ? true : false;
+            if (!wall) {
+                nextX += xA;
+                nextY += yA;
             }
 
         }
@@ -170,7 +163,7 @@ public class Raycaster {
         Ray vCol = getVerticalCollisions(degAngle);
         Ray hCol = getHorizontalCollisions(degAngle);
         // System.out.println(vCol.distance);
-        // return vCol;
+        // return hCol;
         return (hCol.distance >= vCol.distance) ? vCol : hCol;
     }
 
@@ -256,7 +249,7 @@ public class Raycaster {
         
             clearScene();
             List<Ray> rays = getRays();
-            // renderScene(rays);
+            renderScene(rays);
             renderMinimap(0.5f, rays);
             ran = true;
         
