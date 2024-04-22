@@ -1,12 +1,12 @@
 package ie.tudublin;
-import C22501743.oldCode.C22501743Refactor.Raycaster;
+import C22501743.MyVisual;
 import ie.tudublin.Visual;
 import processing.opengl.PShader;
 
 public class ProjectVisual extends Visual 
 {
-    // PShader shader;
-    private Raycaster raycaster = new Raycaster(this);
+    int scene = 1;
+    
     public void settings() {
         size(1200, 1200);
 
@@ -19,18 +19,33 @@ public class ProjectVisual extends Visual
         colorMode(RGB);
     }
     public void keyPressed() {
-        if (key == 'a') {
-            System.out.println("turning: " + raycaster.cam.degAngle);
-            raycaster.cam.turn(10f);
-        } 
-        if (key == 'd') {
-            raycaster.cam.turn(-10f);
-        }
+       if (key == ' ')
+       {
+           getAudioPlayer().cue(0);
+           getAudioPlayer().play();
+       } else if (key == '1')
+       {
+           scene = 1;
+       } else if (key == '2')
+       {
+           scene = 2;
+       }
+
     }
 
     public void draw() {
+        switch (scene) {
+            case 1:
+                MyVisual mv = new MyVisual();
+                mv.setup();
+                mv.draw();
+                
+                break;
         
-        raycaster.run();
+            default:
+                break;
+        }
+        
         
     }
 }
