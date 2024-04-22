@@ -34,7 +34,7 @@ public class myVisual1 extends PApplet
         
         for (int i = 0; i < numCubes; i++) {
             // Ensure cubes are within visible coordinates
-            cubes[i] = new Cube(random(width), random(height), random(-1000, 500), random(20, 50));
+            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-500, 0), random(30, 100));
         }
 
         colorMode(HSB);
@@ -46,7 +46,7 @@ public class myVisual1 extends PApplet
         
         background(0);
 
-        translate(width/2, height/2); // Centers the view
+        translate(width/2, height/2, 0); // Centers the view
 
         float audioLevel = ab.level() * 100;
 
