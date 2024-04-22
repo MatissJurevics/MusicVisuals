@@ -16,6 +16,9 @@ public class myVisual1 extends PApplet
     AudioBuffer ab;
     Cube[] cubes;
     int numCubes = 20;
+    float angleX = 0;
+    float angleY = 0;
+    float sphereRadius = 150;
 
     public void settings()
     {
@@ -34,60 +37,68 @@ public class myVisual1 extends PApplet
         
         for (int i = 0; i < numCubes; i++) {
             // Ensure cubes are within visible coordinates
-            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, 0), random(30, 100));
+            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, -500), random(30, 100), random(2,10));
         }
 
-        colorMode(HSB);
-        strokeWeight(2);
+        colorMode(HSB, 255);
+        noStroke();;
     }
 
-    public void draw()
-    {
-        
+    public void draw() {
         background(0);
-
-        translate(width/2, height/2, 0); // Centers the view
-
-        float audioLevel = ab.level() * 100;
-
-        for (int i = 0; i < cubes.length; i++) {
-            float hue = map(i, 0, numCubes - i, 0, 255);
-            stroke(hue, 255, 255);
-            cubes[i].update(audioLevel);
-            cubes[i].display(this, hue); // Display Cubes
-        }
+        float avg = ab.level() * 100;
         
-    }
+        // Translate to center
+        translate(width/2, height/2, 0);
+        
+        // Draw rotating sphere
+        pushMatrix();
+        rotateX(angleX);
+        rotateY(angleY);
+        fill(255 * sin(angleX), 255, 255);
+        sphere(sphereRadius);
+        popMatrix();
 
-}    
-
-class Cube {
-    PVector position;
-    float size;
-    float angle = 0; //Rotation Angle
-
-    Cube(float x, float y, float z, float size) {
-        position = new PVector(x, y, z);
-        this.size = size;
-    }
-
-    void update(float speed) {
-        position.z += speed;
-        angle += 0.05; // Increment angle to rotate the cube
-        if (position.z > 500) {
-            position.z = -1000; // Reset Cube Position
+        // Update angles
+        angleX += 0.01;
+        angleY += 0.01;
+        
+        // Draw cubes
+        for (int i = 0; i < cubes.length; i++) {
+            cubes[i].speed = 5 + avg;  // Adjust speed based on the audio level
+            cubes[i].update();
+            pushMatrix();
+            translate(cubes[i].x, cubes[i].y, cubes[i].z);
+            rotateX((float) (frameCount * 0.01));
+            rotateY((float) (frameCount * 0.01));
+            noFill();
+            stroke(cubes[i].color);
+            box(cubes[i].size);
+            popMatrix();
         }
     }
 
-    void display(PApplet app, float hue) {
-        app.pushMatrix();
-        app.translate(position.x, position.y, position.z);
-        app.rotateX(angle); // Rotate around x axis
-        app.rotateY(angle); // Rotate around y axis
-        app.noFill(); // Hollow Cube
-        app.stroke(hue, 255, 255);
-        app.box(size);
-        app.popMatrix();
+    class Cube {
+        float x, y, z;
+        float size;
+        int color;
+        float speed;
+
+        Cube(float x, float y, float z, float size, float speed) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.size = size;
+            this.color = color(random(255), 255, 255);  // Random color
+            this.speed = speed;
+        }
+
+        void update() {
+            z += speed; // move towards the fullScreen
+            if (z > 500) {
+                z = -1000; // reset far away
+            }
+        }
     }
 }
 
