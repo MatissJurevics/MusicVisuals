@@ -34,7 +34,7 @@ public class myVisual1 extends PApplet
         
         for (int i = 0; i < numCubes; i++) {
             // Ensure cubes are within visible coordinates
-            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-500, 0), random(30, 100));
+            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, 0), random(30, 100));
         }
 
         colorMode(HSB);
