@@ -47,6 +47,8 @@ public class myVisual1 extends PApplet
     public void draw() {
         background(0);
         float avg = ab.level() * 100;
+
+        // Waveform around the screen edges
         
         // Translate to center
         translate(width/2, height/2, 0);
@@ -89,7 +91,7 @@ public class myVisual1 extends PApplet
             this.y = y;
             this.z = z;
             this.size = size;
-            this.color = color(random(255), 255, 255);  // Random color
+            this.color = color(random(255), random(255), random(255));  // Random color
             this.speed = speed;
         }
 
