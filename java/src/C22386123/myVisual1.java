@@ -39,7 +39,7 @@ public class myVisual1 extends PApplet
     AudioInput ai;
     AudioBuffer ab;
     Cube[] cubes;
-    int numCubes = 20;
+    int numCubes = 50;
 
     public void settings()
     {
