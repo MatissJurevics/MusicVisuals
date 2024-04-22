@@ -65,10 +65,8 @@ public class myVisual1 extends PApplet
 
     public void draw()
     {
-        // First color input: black (HSB with hue=0, saturation=0, brightness=0)
-        // Second color input: a bright cyan-like color (HSB with hue=120, saturation=100, brightness=100)
-        // Interpolation factor: uses the audio's current amplitude level multiplied by 10
-        background(lerpColor(color(0,0,0), color(120,100,100), ap.mix.level() * 10));
+        
+        background(0);
 
         float amplitude = ap.mix.level() * 10;
         float speed = map(amplitude, 0, 1, 5, 20);
