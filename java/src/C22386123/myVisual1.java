@@ -7,30 +7,6 @@ import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-class Cube {
-    PVector position;
-    float size;
-
-    Cube(float x, float y, float z, float size) {
-        position = new PVector(x, y, z);
-        this.size = size;
-    }
-
-    void update(float speed) {
-        position.z += speed;
-        if (position.z > 500) {
-            position.z = -1000; // Reset Cube Position
-        }
-    }
-
-    void display(PApplet app, float hue) {
-        app.pushMatrix();
-        app.translate(position.x, position.y, position.z);
-        app.fill(hue, 255, 255);
-        app.box(size);
-        app.popMatrix();
-    }
-}
 
 public class myVisual1 extends PApplet
 {
@@ -39,11 +15,11 @@ public class myVisual1 extends PApplet
     AudioInput ai;
     AudioBuffer ab;
     Cube[] cubes;
-    int numCubes = 50;
+    int numCubes = 20;
 
     public void settings()
     {
-        //size(1024, 1000, P3D);
+        // size(1024, 1000, P3D);
         fullScreen(P3D, SPAN);
         //size(800,800);
     }
@@ -57,10 +33,12 @@ public class myVisual1 extends PApplet
         cubes = new Cube[numCubes];
         
         for (int i = 0; i < numCubes; i++) {
-            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, 0), random(30, 70));
+            // Ensure cubes are within visible coordinates
+            cubes[i] = new Cube(random(width), random(height), random(-1000, 500), random(20, 50));
         }
 
         colorMode(HSB);
+        strokeWeight(2);
     }
 
     public void draw()
@@ -68,18 +46,49 @@ public class myVisual1 extends PApplet
         
         background(0);
 
-        float amplitude = ap.mix.level() * 10;
-        float speed = map(amplitude, 0, 1, 5, 20);
-        float hue = map(amplitude, 0, 1, 0, 255);
+        translate(width/2, height/2); // Centers the view
 
-        translate(width/2, height/2);
+        float audioLevel = ab.level() * 100;
 
         for (int i = 0; i < cubes.length; i++) {
-            cubes[i].update(speed);
-            cubes[i].display(this, hue);
+            float hue = map(i, 0, numCubes - i, 0, 255);
+            stroke(hue, 255, 255);
+            cubes[i].update(audioLevel);
+            cubes[i].display(this, hue); // Display Cubes
         }
         
     }
+
 }    
+
+class Cube {
+    PVector position;
+    float size;
+    float angle = 0; //Rotation Angle
+
+    Cube(float x, float y, float z, float size) {
+        position = new PVector(x, y, z);
+        this.size = size;
+    }
+
+    void update(float speed) {
+        position.z += speed;
+        angle += 0.05; // Increment angle to rotate the cube
+        if (position.z > 500) {
+            position.z = -1000; // Reset Cube Position
+        }
+    }
+
+    void display(PApplet app, float hue) {
+        app.pushMatrix();
+        app.translate(position.x, position.y, position.z);
+        app.rotateX(angle); // Rotate around x axis
+        app.rotateY(angle); // Rotate around y axis
+        app.noFill(); // Hollow Cube
+        app.stroke(hue, 255, 255);
+        app.box(size);
+        app.popMatrix();
+    }
+}
 
 
