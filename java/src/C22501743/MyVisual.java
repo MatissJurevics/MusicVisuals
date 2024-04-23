@@ -1,11 +1,12 @@
 package C22501743;
-import ddf.minim.AudioBuffer;
 import ie.tudublin.Visual;
 import processing.opengl.PShader;
+import processing.core.PShape;
 
 public class MyVisual extends Visual {
     
     boolean sharp = false;
+    PShape eyeShape;
     
     public void settings() {
         size(1920, 1080, P2D);
@@ -18,6 +19,8 @@ public class MyVisual extends Visual {
         startListening();
         // calculateAverageAmplitude();
         colorMode(HSB);
+        eyeShape = loadShape("eye2.svg");
+
 
     }
 
@@ -84,11 +87,16 @@ public class MyVisual extends Visual {
 
     public void drawEye() {
         resetShader();
+        shapeMode(CENTER);
+        shape(eyeShape, width/2, height/2, 800, 400);
         fill(255, 255, 255);
         ellipse(width/2, height/2, 300, 300);
         fill(0, 0, 0);
-        rotate(3.14f/4);
-        ellipse(width/2, height/2, 50, 300);
+        ellipse(width/2, height/2, 120, 120);
+        fill(255, 255, 255);
+        ellipse(width/2, height/2, 100, 100);
+        fill(0, 0, 0);
+        ellipse(width/2, height/2, 80, 80);
     }
     
     public void drawBackground() {
