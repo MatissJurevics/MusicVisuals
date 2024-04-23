@@ -1,12 +1,12 @@
 package C22501743;
+import ddf.minim.AudioBuffer;
 import ie.tudublin.Visual;
 import processing.opengl.PShader;
-public class MyVisual extends Visual {
-    int rectsPerLine = 60;
-    float[][] rectCoords = new float[rectsPerLine][2];
-    float[] startPoints = new float[2];     // x, y values for the start point of a line that the rectangles will be drawn on
-    float[] endPoints = new float[2];       // x, y values for the end point of a line that the rectangles will be drawn on
 
+public class MyVisual extends Visual {
+    
+    boolean sharp = false;
+    
     public void settings() {
         size(1920, 1080, P2D);
     }
@@ -14,25 +14,46 @@ public class MyVisual extends Visual {
     public void setup() {
         frameRate(60);
         startMinim();
-        loadAudio("heroplanet.mp3");
+        loadAudio("Skrillex, Missy Elliott, & Mr. Oizo - RATATA [Official Visualizer].mp3");
+        startListening();
+        // calculateAverageAmplitude();
         colorMode(HSB);
-        startPoints[0] = 0;
-        startPoints[1] = 0;
-        endPoints[0] = width/2;
-        endPoints[1] = height/2;
-    }
-    PShader testShader;
-    public void draw() {
-        drawBackground();
-        testShader = loadShader("test.frag");
-        shader(testShader);
-        float halfHeight = height/2;
-        testShader.set("u_resolution", (float)width, (float)halfHeight);
-        testShader.set("u_time", millis()/1000.0f);
-        rect(0,0,width,height);
-        drawGround();
 
     }
+
+    public void keyPressed() {
+        switch (key) {
+            case ' ':
+                getAudioPlayer().cue(0);
+                getAudioPlayer().play();
+                break;
+            case 's':
+                sharp = !sharp;
+                break;
+            default:
+                break;
+        }
+    }
+
+    PShader testShader;
+    public void draw() {
+        // float smoothedAmp = getSmoothedAmplitude();
+        // System.out.println(smoothedAmp);
+        // float circleRadius = map(smoothedAmp, 0f, 1f, 0f, 2f);
+        testShader = loadShader("test.frag");
+
+        shader(testShader);
+        testShader.set("u_resolution", (float)width, (float)height);
+        testShader.set("u_time", millis()/1000.0f);
+        // testShader.set("u_sharp", sharp);
+        // testShader.set("u_circleRadius", circleRadius);
+        
+        rect(0,0,width,height);
+        // drawBackground();
+        // drawGround();
+        drawEye();
+    }
+    // float angle = 0;
 
     public void drawGround() {
         resetShader();
@@ -52,11 +73,28 @@ public class MyVisual extends Visual {
         }
         line((3*width)/4, startHeight, (11*width)/12, endHeight);
         line((width)/4, startHeight, (1*width)/12, endHeight);
+
+        // lines on the side of the screen that goes to the music
+        stroke(255, 0, 0);
+        float startWidth = map(getAmplitude(), 0, 1, 0.25f, 0.0833f) * width;
+        float endWidth = map(getAmplitude(), 0, 1, 0.75f, 0.9167f) * width;
+        line(startWidth, startHeight, endWidth, endHeight);
+
     }
+
+    public void drawEye() {
+        resetShader();
+        fill(255, 255, 255);
+        ellipse(width/2, height/2, 300, 300);
+        fill(0, 0, 0);
+        rotate(3.14f/4);
+        ellipse(width/2, height/2, 50, 300);
+    }
+    
     public void drawBackground() {
         background(0);
         stroke(255);
-        resetShader();
+        // resetShader();
         
     }
 }
