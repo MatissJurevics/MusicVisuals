@@ -7,6 +7,7 @@ import processing.core.PShape;
 public class EyeVisual extends Visual {
     
     int sharp = 0;
+    int epilepsy = 0;
     PShape eyeShape;
     AudioPlayer ap;
     
@@ -34,11 +35,10 @@ public class EyeVisual extends Visual {
                 getAudioPlayer().play();
                 break;
             case 's':
-                if (sharp == 0) {
-                    sharp = 1;
-                } else {
-                    sharp = 0;
-                }
+                sharp = (sharp + 1) % 2;
+                break;
+            case 'e':
+                epilepsy = (epilepsy + 1) % 2;
                 break;
             
             default:
@@ -58,11 +58,8 @@ public class EyeVisual extends Visual {
         shader(testShader);
         testShader.set("u_resolution", (float)width, (float)height);
         testShader.set("u_time", millis()/1000.0f);
-        if (millis() > 50000) {
-            testShader.set("u_sharp", sharp);
-        } else {
-            testShader.set("u_sharp", sharp);
-        }
+        testShader.set("u_sharp", sharp);
+        testShader.set("u_epilepsy", epilepsy);
         testShader.set("u_amplitude", (getAmplitude()*2));
         System.out.println(getAmplitude());
         // testShader.set("u_sharp", sharp);
