@@ -1,5 +1,5 @@
 package ie.tudublin;
-import C22501743.MyVisual;
+import C22501743.EyeVisual;
 import ie.tudublin.Visual;
 import processing.opengl.PShader;
 
@@ -36,7 +36,7 @@ public class ProjectVisual extends Visual
     public void draw() {
         switch (scene) {
             case 1:
-                MyVisual mv = new MyVisual();
+                EyeVisual mv = new EyeVisual();
                 mv.setup();
                 mv.draw();
                 
