@@ -22,7 +22,10 @@ called "RATATA" by Skrillex, Missy Elliot & Mr. Oizo. For Karls visual, the audi
 and able to switch to different scenes. This file is made in ie.main package for convenience.
 
 ## Karls Visual
+![An image](images/karlsvisual.png)
 
+## Matiss's Visual
+![An image](images/matissvisual.png)
 
 # What I am most proud of in the assignment
 
