@@ -27,4 +27,8 @@ and able to switch to different scenes. This file is made in ie.main package for
 ## Matiss's Visual
 ![An image](images/matissvisual.png)
 
-# What I am most proud of in the assignment
+# How does it work
+
+## Matiss' Visual
+This scene is made up of 2 main components, a background frame which is created using a glsl shader and a an eye which is contained in an eye object. The glsl shader uses some basic triganometry to create a pattern and the eye object is used to work with the offsets used for the shaking pupil.
+
