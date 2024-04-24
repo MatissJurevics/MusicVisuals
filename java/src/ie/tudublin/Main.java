@@ -5,13 +5,13 @@ package ie.tudublin;
 // import example.MyVisual;
 // import example.RotatingAudioBands;
 import C22386123.KarlsVisual;
-// import C22501743.EyeVisual;
+import C22501743.EyeVisual;
 
 public class Main {
 
     public void startUI() {
         String[] a = { "MAIN" };
-        processing.core.PApplet.runSketch(a, new KarlsVisual());
+        processing.core.PApplet.runSketch(a, new EyeVisual());
     }
 
     public static void main(String[] args) {

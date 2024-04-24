@@ -16,7 +16,8 @@ public class EyeVisual extends Visual {
     Eye eye;
     
     public void settings() {
-        size(1920, 1080, P2D);
+        // size(1920, 1080, P2D);
+        fullScreen(P2D);
     }
 
     public void setup() {
