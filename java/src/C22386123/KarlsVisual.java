@@ -6,9 +6,10 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.core.PVector;
+import C22386123.Cube;
 
 
-public class myVisual1 extends PApplet
+public class KarlsVisual extends PApplet
 {
     Minim minim;
     AudioPlayer ap;
@@ -37,7 +38,7 @@ public class myVisual1 extends PApplet
         
         for (int i = 0; i < numCubes; i++) {
             // Ensure cubes are within visible coordinates
-            cubes[i] = new Cube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, -500), random(30, 100), random(2,10));
+            cubes[i] = new VisualCube(random(-width/2, width/2), random(-height/2, height/2), random(-1000, -500), random(30, 100), random(2,10));
         }
 
         colorMode(HSB, 255);
@@ -80,25 +81,17 @@ public class myVisual1 extends PApplet
         }
     }
 
-    class Cube {
-        float x, y, z;
-        float size;
-        int color;
-        float speed;
+    class VisualCube extends Cube {
 
-        Cube(float x, float y, float z, float size, float speed) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.size = size;
-            this.color = color(random(255), random(255), random(255));  // Random color
-            this.speed = speed;
+        VisualCube(float x, float y, float z, float size, float speed) {
+            super(x,y,z,size,speed);
+            this.color = color(random(255), random(255), random(255)); // Random color
         }
 
-        void update() {
-            z += speed; // move towards the fullScreen
+        public void update() {
+            z += speed; // Move towards the fullscreen
             if (z > 500) {
-                z = -1000; // reset far away
+                z = -1000; // Reset Far Away
             }
         }
     }
