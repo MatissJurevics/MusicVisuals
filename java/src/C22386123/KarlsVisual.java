@@ -7,6 +7,7 @@ import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.core.PVector;
 import C22386123.Cube;
+import C22386123.Particle;
 
 
 public class KarlsVisual extends PApplet
@@ -20,6 +21,7 @@ public class KarlsVisual extends PApplet
     float angleX = 0;
     float angleY = 0;
     float sphereRadius = 150;
+    ParticleSystem ps;
 
     public void settings()
     {
@@ -35,6 +37,7 @@ public class KarlsVisual extends PApplet
         ap.play();
         ab = ap.mix;
         cubes = new Cube[numCubes];
+        ps = new ParticleSystem(this);
         
         for (int i = 0; i < numCubes; i++) {
             // Ensure cubes are within visible coordinates
@@ -49,7 +52,10 @@ public class KarlsVisual extends PApplet
         background(0);
         float avg = ab.level() * 100;
 
-        // Waveform around the screen edges
+        // Particle System
+        if (ps.isActive()) {
+            ps.run();
+        }
         
         // Translate to center
         translate(width/2, height/2, 0);
@@ -79,6 +85,12 @@ public class KarlsVisual extends PApplet
             box(cubes[i].size);
             popMatrix();
         }
+
+        // Particles Emmiting
+        if (ps.active) {
+            ps.emit(2, random(width), -10); // Emit particles from the top
+            ps.run();
+        }
     }
 
     class VisualCube extends Cube {
@@ -93,6 +105,18 @@ public class KarlsVisual extends PApplet
             if (z > 500) {
                 z = -1000; // Reset Far Away
             }
+        }
+    }
+
+    public void keyPressed() {
+        if (key == 'a' || key == 'A') {
+            ps.start(width/2, 0);
+        }
+    }
+
+    public void keyReleased() {
+        if (key == 'a' || key == 'A') {
+            ps.stop();
         }
     }
 }
