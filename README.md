@@ -32,3 +32,10 @@ and able to switch to different scenes. This file is made in ie.main package for
 ## Matiss' Visual
 This scene is made up of 2 main components, a background frame which is created using a glsl shader and a an eye which is contained in an eye object. The glsl shader uses some basic triganometry to create a pattern and the eye object is used to work with the offsets used for the shaking pupil.
 
+# What Im proud of
+##Karl
+- I got a better understanding of OOP concepts and how to use it in coding
+- Adjusting the speed of the cubes based off the audio levels
+- Learning how to extend other files to go into my Main visual file so it doesnt need to cramp up into one full file
+
+
