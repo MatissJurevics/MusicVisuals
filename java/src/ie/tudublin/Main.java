@@ -13,7 +13,7 @@ public class Main {
         String[] a = { "MAIN" };
         processing.core.PApplet.runSketch(a, new KarlsVisual());
     }
-
+ 
     public static void main(String[] args) {
         Main main = new Main();
         main.startUI();
