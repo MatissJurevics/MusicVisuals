@@ -75,7 +75,7 @@ public class KarlsVisual extends PApplet
         // Draw cubes
         for (int i = 0; i < cubes.length; i++) {
             cubes[i].speed = 5 + avg;  // Adjust speed based on the audio level
-            cubes[i].update();
+            cubes[i].update(); // Updates the cubes position
             pushMatrix();
             translate(cubes[i].x, cubes[i].y, cubes[i].z);
             rotateX((float) (frameCount * 0.01));
@@ -86,13 +86,14 @@ public class KarlsVisual extends PApplet
             popMatrix();
         }
 
-        // Particles Emmiting
+        // Emit particles if particle system is active
         if (ps.active) {
             ps.emit(2, random(width), -10); // Emit particles from the top
             ps.run();
         }
     }
 
+    // Inner class defining VisualCube, extending Cube
     class VisualCube extends Cube {
 
         VisualCube(float x, float y, float z, float size, float speed) {
@@ -100,6 +101,7 @@ public class KarlsVisual extends PApplet
             this.color = color(random(255), random(255), random(255)); // Random color
         }
 
+        // Method to update cube position
         public void update() {
             z += speed; // Move towards the fullscreen
             if (z > 500) {
