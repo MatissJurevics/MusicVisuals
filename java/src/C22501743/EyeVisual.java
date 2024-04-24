@@ -1,15 +1,17 @@
 package C22501743;
 import ddf.minim.AudioPlayer;
+import processing.core.PShape;
 import ie.tudublin.Visual;
 import processing.opengl.PShader;
-import processing.core.PShape;
 
 public class EyeVisual extends Visual {
     
     int sharp = 0;
     int epilepsy = 0;
-    PShape eyeShape;
     AudioPlayer ap;
+    PShape eyeShape;
+    PShader testShader;
+    Eye eye;
     
     public void settings() {
         size(1920, 1080, P2D);
@@ -25,6 +27,7 @@ public class EyeVisual extends Visual {
         colorMode(HSB);
         eyeShape = loadShape("eye2.svg");
         ap = getAudioPlayer();
+        eye = new Eye(this);
 
     }
 
@@ -40,19 +43,20 @@ public class EyeVisual extends Visual {
             case 'e':
                 epilepsy = (epilepsy + 1) % 2;
                 break;
-            
+            case 'm':
+                float randwidth = random(0, width);
+                eye.movePupil(randwidth, 100);
+                break;
+            case 'n':
+                eye.handleEyeCloseOpen();
+                break;
             default:
                 break;
         }
     }
 
-    PShader testShader;
     public void draw() {
         calculateAverageAmplitude();
-
-        // float smoothedAmp = getSmoothedAmplitude();
-        // System.out.println(smoothedAmp);
-        // float circleRadius = map(smoothedAmp, 0f, 1f, 0f, 2f);
         testShader = loadShader("test.frag");
 
         shader(testShader);
@@ -62,13 +66,16 @@ public class EyeVisual extends Visual {
         testShader.set("u_epilepsy", epilepsy);
         testShader.set("u_amplitude", (getAmplitude()*2));
         System.out.println(getAmplitude());
-        // testShader.set("u_sharp", sharp);
-        // testShader.set("u_circleRadius", circleRadius);
+
         
         rect(0,0,width,height);
-        // drawBackground();
-        // drawGround();
-        drawEye();
+        
+        resetShader();
+        eye.renderEye();
+
+        // test movePupil
+        
+        
     }
     // float angle = 0;
 
@@ -95,23 +102,24 @@ public class EyeVisual extends Visual {
 
     }
 
-    public void drawEye() {
-        resetShader();
-        shapeMode(CENTER);
-        float pupilX, pupilY;
-        float shakeX = map(getAmplitude(), 0, 1, -10, 10);
-        pupilX = width/2 + shakeX;
-        pupilY = height/2 + shakeX;
-        shape(eyeShape, width/2, height/2, 800, 400+getAmplitude()*50);
-        fill(255, 255, 255);
-        ellipse(width/2, height/2, 300, 300);
-        fill(0, 0, 0);
-        ellipse(pupilX, pupilY, 120, 120);
-        fill(255, 255, 255);
-        ellipse(pupilX, pupilY, 100, 100);
-        fill(0, 0, 0);
-        ellipse(pupilX, pupilY, 80, 80);
-    }
+    // public void drawEye() {
+    //     resetShader();
+    //     shapeMode(CENTER);
+    //     float pupilX, pupilY;
+    //     float shakeX = map(getAmplitude(), 0, 1, -10, 10);
+    //     float shakeY = map(getAmplitude(), 0, 1, -10, 10);
+    //     pupilX = width/2 + shakeX;
+    //     pupilY = height/2 - shakeY;
+    //     shape(eyeShape, width/2, height/2, 800, 400+getAmplitude()*50);
+    //     fill(255, 255, 255);
+    //     ellipse(width/2, height/2, 300, 300);
+    //     fill(0, 0, 0);
+    //     ellipse(pupilX, pupilY, 120, 120);
+    //     fill(255, 255, 255);
+    //     ellipse(pupilX, pupilY, 100, 100);
+    //     fill(0, 0, 0);
+    //     ellipse(pupilX, pupilY, 80, 80);
+    // }
     
     public void drawBackground() {
         background(0);

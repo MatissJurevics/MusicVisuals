@@ -52,9 +52,7 @@ void main() {
         finalColor.x += finalColor.x * (u_amplitude);
         finalColor.y += finalColor.y * (u_amplitude);
         finalColor.z += finalColor.z * (u_amplitude);
-        if (length(uv0) < u_circleRadius + 0.1) {
-            finalColor = vec3(0.0);
-        }
+       
 
     }
     
