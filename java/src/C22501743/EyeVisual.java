@@ -8,6 +8,8 @@ public class EyeVisual extends Visual {
     
     int sharp = 0;
     int epilepsy = 0;
+    int lastEyeMove = 0; // millis timestamp of when the eye last moved
+    int eyeMoveDelay = 2000; // delay between eye movements
     AudioPlayer ap;
     PShape eyeShape;
     PShader testShader;
@@ -65,15 +67,18 @@ public class EyeVisual extends Visual {
         testShader.set("u_sharp", sharp);
         testShader.set("u_epilepsy", epilepsy);
         testShader.set("u_amplitude", (getAmplitude()*2));
-        System.out.println(getAmplitude());
+        // System.out.println(getAmplitude());
 
         
         rect(0,0,width,height);
         
         resetShader();
         eye.renderEye();
-
-        // test movePupil
+        if (millis() - lastEyeMove > eyeMoveDelay) {
+            float randwidth = random(0, width);
+            eye.movePupil(randwidth, 10);
+            lastEyeMove = millis();
+        }
         
         
     }
@@ -102,24 +107,7 @@ public class EyeVisual extends Visual {
 
     }
 
-    // public void drawEye() {
-    //     resetShader();
-    //     shapeMode(CENTER);
-    //     float pupilX, pupilY;
-    //     float shakeX = map(getAmplitude(), 0, 1, -10, 10);
-    //     float shakeY = map(getAmplitude(), 0, 1, -10, 10);
-    //     pupilX = width/2 + shakeX;
-    //     pupilY = height/2 - shakeY;
-    //     shape(eyeShape, width/2, height/2, 800, 400+getAmplitude()*50);
-    //     fill(255, 255, 255);
-    //     ellipse(width/2, height/2, 300, 300);
-    //     fill(0, 0, 0);
-    //     ellipse(pupilX, pupilY, 120, 120);
-    //     fill(255, 255, 255);
-    //     ellipse(pupilX, pupilY, 100, 100);
-    //     fill(0, 0, 0);
-    //     ellipse(pupilX, pupilY, 80, 80);
-    // }
+    
     
     public void drawBackground() {
         background(0);

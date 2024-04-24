@@ -4,7 +4,7 @@ package ie.tudublin;
 // import example.CubeVisual1;
 // import example.MyVisual;
 // import example.RotatingAudioBands;
-import C22386123.KarlsVisual;
+import C22386123.myVisual1;
 import C22501743.EyeVisual;
 
 public class Main {

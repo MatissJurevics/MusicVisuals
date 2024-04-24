@@ -63,6 +63,9 @@ public class Eye  {
      * @param t The time in milliseconds for the pupil to move
      */
     public void movePupil(float x, int t) {
+        if (blinkState == 0) {
+            return;
+        }
         float endOffsetX, endOffsetY;
         float startOffsetX = pupilOffsetX;
         float startOffsetY = pupilOffsetY;
@@ -88,13 +91,9 @@ public class Eye  {
     public void handleEyeCloseOpen() {
         // over 300 miliseconds close the eye
         float startBlinkState = blinkState;
-        float endBlinkState = startBlinkState == 1 ? 0 : 1;
         float startTime = canvas.millis();
         resetPupil();
-        while (canvas.millis() - startTime < 300) {
-            float p = (canvas.millis() - startTime) / 300;
-            blinkState = PApplet.lerp(startBlinkState, endBlinkState, p);
-            // renderInnerEye();
-        }
+        blinkState = blinkState == 1 ? 0 : 1;
+
     }
 }
